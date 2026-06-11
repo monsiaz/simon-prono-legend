@@ -4,6 +4,7 @@ import Apparition from "@/components/anim/Apparition";
 import BarreRemplie from "@/components/anim/BarreRemplie";
 import CompteurProba from "@/components/anim/CompteurProba";
 import Drapeau from "@/components/Drapeau";
+import FlouBoss from "@/components/FlouBoss";
 import ScoreFloute from "@/components/ScoreFloute";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 import { chargerPronostics } from "@/lib/service/pronostics";
@@ -43,13 +44,17 @@ export default async function PageCotes() {
             <p className="font-data text-xs uppercase tracking-[0.25em] text-volt">Vainqueur prédit par le modèle</p>
             <ScoreFloute libelle="Voir le vainqueur" className="mt-1">
               <span className="flex items-center gap-3">
-                <Drapeau emoji={equipeFavorite.drapeau} nom="Vainqueur prédit" taille="text-5xl" />
+                <Drapeau iso={equipeFavorite.iso} nom="Vainqueur prédit" taille="xl" />
                 <span className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">{equipeFavorite.nomFr}</span>
               </span>
             </ScoreFloute>
           </div>
         </div>
-        <CompteurProba valeur={favori.titre} decimales={1} className="font-display text-5xl font-black text-volt sm:text-6xl" />
+        <div className="flex items-center gap-4">
+          {/* eslint-disable-next-line @next/next/no-img-element -- asset local */}
+          <img src="/visuels/trophee.webp" alt="" width={88} height={88} className="hidden h-20 w-20 sm:block" />
+          <CompteurProba valeur={favori.titre} decimales={1} className="font-display text-5xl font-black text-volt sm:text-6xl" />
+        </div>
       </section>
 
       <div data-reveal className="mt-6 overflow-x-auto rounded-2xl border border-ligne bg-carte">
@@ -75,13 +80,13 @@ export default async function PageCotes() {
                     <span className="flex items-center gap-2.5">
                       <span className="w-5 font-data text-xs text-brume">{rang + 1}</span>
                       {rang === 0 ? (
-                        <span aria-hidden title="Réservé au boss du game" className="flex select-none items-center gap-2.5 blur-[9px]">
-                          <Drapeau emoji={equipe.drapeau} nom="Équipe masquée" taille="text-lg" />
+                        <FlouBoss intensite="blur-[9px]" className="flex items-center gap-2.5">
+                          <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="sm" />
                           <span className="font-medium">{equipe.nomFr}</span>
-                        </span>
+                        </FlouBoss>
                       ) : (
                         <>
-                          <Drapeau emoji={equipe.drapeau} nom={equipe.nomFr} taille="text-lg" />
+                          <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="sm" />
                           <span className="font-medium">{equipe.nomFr}</span>
                         </>
                       )}

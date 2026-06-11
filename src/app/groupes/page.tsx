@@ -50,7 +50,7 @@ export default async function PageGroupes() {
                   <li key={equipe.clef}>
                     <div className="flex items-center justify-between text-sm">
                       <span className="flex items-center gap-2">
-                        <Drapeau emoji={equipe.drapeau} nom={equipe.nomFr} taille="text-lg" />
+                        <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="sm" />
                         {equipe.nomFr}
                       </span>
                       <span className="font-data font-bold text-craie">{Math.round(proba * 100)} %</span>

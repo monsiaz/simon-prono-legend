@@ -13,7 +13,7 @@ import type { Phase } from "@/lib/data/calendrier";
 export const revalidate = 1800;
 
 export const metadata = {
-  title: "Le tableau final — Pronos·26",
+  title: "Le tableau final — Simon Prono Legend",
   description: "Des 32es de finale à la finale : affiches connues et affiches probables selon 10 000 simulations.",
 };
 
@@ -78,8 +78,8 @@ function CarteTableau({ match, apparitions, nSims, equipes }: { match: MatchEnri
       <div className="mt-3 space-y-2">
         {domicile && exterieur ? (
           <>
-            <LigneEquipe nom={domicile.nomFr} drapeau={domicile.drapeau} />
-            <LigneEquipe nom={exterieur.nomFr} drapeau={exterieur.drapeau} />
+            <LigneEquipe nom={domicile.nomFr} iso={domicile.iso} />
+            <LigneEquipe nom={exterieur.nomFr} iso={exterieur.iso} />
           </>
         ) : (
           <AffichesProbables numero={m.numero} apparitions={apparitions} nSims={nSims} equipes={equipes} placeholders={[m.placeholderDomicile, m.placeholderExterieur]} />
@@ -89,11 +89,11 @@ function CarteTableau({ match, apparitions, nSims, equipes }: { match: MatchEnri
   );
 }
 
-function LigneEquipe({ nom, drapeau, detail }: { nom: string; drapeau: string; detail?: string }) {
+function LigneEquipe({ nom, iso, detail }: { nom: string; iso: string; detail?: string }) {
   return (
     <p className="flex items-center justify-between gap-2 text-sm font-medium">
       <span className="flex items-center gap-2">
-        <Drapeau emoji={drapeau} nom={nom} taille="text-base" />
+        <Drapeau iso={iso} nom={nom} taille="sm" />
         {nom}
       </span>
       {detail && <span className="font-data text-xs text-volt">{detail}</span>}
@@ -112,7 +112,7 @@ function AffichesProbables({ numero, apparitions, nSims, equipes, placeholders }
       {probables.map(([clef, compte]) => {
         const equipe = equipes.get(clef);
         if (!equipe) return null;
-        return <LigneEquipe key={clef} nom={equipe.nomFr} drapeau={equipe.drapeau} detail={`${Math.round((compte / nSims) * 100)} %`} />;
+        return <LigneEquipe key={clef} nom={equipe.nomFr} iso={equipe.iso} detail={`${Math.round((compte / nSims) * 100)} %`} />;
       })}
       <p className="font-data text-[10px] text-brume">affiche la plus probable</p>
     </>

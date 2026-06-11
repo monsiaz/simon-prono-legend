@@ -16,9 +16,17 @@ const spaceGrotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Pronos·26 — Pronostics Coupe du Monde 2026",
+  metadataBase: new URL("https://simon-prono-legend.vercel.app"),
+  title: "Simon Prono Legend — Pronostics Coupe du Monde 2026",
   description:
-    "Pronostics statistiques de la Coupe du Monde 2026 : probabilités, scores exacts conseillés et cotes de titre, recalculés après chaque match. Modèle Elo + Poisson bivarié calibré sur 37 000 matchs internationaux.",
+    "Ici, on ne rêve pas : on prédit. Pronostics statistiques de la Coupe du Monde 2026 — probabilités, scores exacts (réservés au boss) et cotes de titre, recalculés après chaque match. Modèle Elo + Poisson bivarié calibré sur 37 000 matchs internationaux.",
+  openGraph: {
+    title: "Simon Prono Legend",
+    description: "Ici, on ne rêve pas : on prédit. Les pronos de légende de la Coupe du Monde 2026.",
+    images: [{ url: "/visuels/og.jpg", width: 1200, height: 800 }],
+    locale: "fr_FR",
+    type: "website",
+  },
 };
 
 const LIENS = [
@@ -28,6 +36,7 @@ const LIENS = [
   { href: "/cotes", label: "Cotes" },
   { href: "/actus", label: "Actus" },
   { href: "/methode", label: "Méthode" },
+  { href: "/compte", label: "Mon compte" },
 ];
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
@@ -36,12 +45,17 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body className="min-h-full flex flex-col">
         <header className="sticky top-0 z-50 border-b border-ligne bg-nuit/90 backdrop-blur-sm">
           <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-6">
-            <Link href="/" className="group flex items-baseline gap-1.5" aria-label="Pronos 26 — accueil">
-              <span className="font-display text-xl font-black uppercase tracking-tight text-craie">
-                Pronos
-              </span>
-              <span className="font-display text-xl font-black text-volt transition-transform duration-200 group-hover:-rotate-6">
-                ·26
+            <Link href="/" className="group flex items-center gap-2.5" aria-label="Simon Prono Legend — accueil">
+              {/* eslint-disable-next-line @next/next/no-img-element -- asset local */}
+              <img
+                src="/visuels/logo-embleme.webp"
+                alt=""
+                width={40}
+                height={40}
+                className="h-9 w-9 rounded-lg transition-transform duration-200 group-hover:-rotate-6 sm:h-10 sm:w-10"
+              />
+              <span className="font-display text-base font-black uppercase leading-none tracking-tight text-craie sm:text-lg">
+                Simon <span className="text-volt">Prono</span> Legend
               </span>
             </Link>
             <nav className="flex flex-wrap items-center justify-end gap-0.5" aria-label="Navigation principale">

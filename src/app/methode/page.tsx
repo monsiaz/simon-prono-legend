@@ -7,7 +7,7 @@ import ratingsJson from "@/data/ratings.json";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 
 export const metadata = {
-  title: "La méthode — Pronos·26",
+  title: "La méthode — Simon Prono Legend",
   description: "Elo pondéré, Poisson bivarié Dixon-Coles, Monte Carlo : la mécanique complète du modèle, ses sources de données et son backtest out-of-sample.",
 };
 
@@ -93,7 +93,7 @@ export default function PageMethode() {
             <li key={equipe.clef} className="flex items-center justify-between border-b border-ligne/60 pb-2 text-sm last:border-0">
               <span className="flex items-center gap-2.5">
                 <span className="w-5 font-data text-xs text-brume">{i + 1}</span>
-                <Drapeau emoji={equipe.drapeau} nom={equipe.nomFr} taille="text-lg" />
+                <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="sm" />
                 {equipe.nomFr}
               </span>
               <span className="font-data font-bold text-volt">{equipe.elo}</span>

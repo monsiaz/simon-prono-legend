@@ -33,9 +33,9 @@ export default function CarteMatch({ match }: { match: MatchEnrichi }) {
         </div>
 
         <div className="mt-3 grid grid-cols-[1fr_auto_1fr] items-center gap-3">
-          <CoteEquipe nom={domicile?.nomFr ?? m.placeholderDomicile ?? "?"} drapeau={domicile?.drapeau} alignement="items-end text-right" />
+          <CoteEquipe nom={domicile?.nomFr ?? m.placeholderDomicile ?? "?"} iso={domicile?.iso} alignement="items-end text-right" />
           <Centre match={match} />
-          <CoteEquipe nom={exterieur?.nomFr ?? m.placeholderExterieur ?? "?"} drapeau={exterieur?.drapeau} alignement="items-start text-left" />
+          <CoteEquipe nom={exterieur?.nomFr ?? m.placeholderExterieur ?? "?"} iso={exterieur?.iso} alignement="items-start text-left" />
         </div>
 
         {prevision && !m.joue && (
@@ -52,10 +52,10 @@ export default function CarteMatch({ match }: { match: MatchEnrichi }) {
   );
 }
 
-function CoteEquipe({ nom, drapeau, alignement }: { nom: string; drapeau?: string; alignement: string }) {
+function CoteEquipe({ nom, iso, alignement }: { nom: string; iso?: string; alignement: string }) {
   return (
     <div className={`flex flex-col gap-1 ${alignement}`}>
-      {drapeau && <Drapeau emoji={drapeau} nom={nom} />}
+      {iso && <Drapeau iso={iso} nom={nom} />}
       <span className="font-display text-sm font-bold leading-tight sm:text-base">{nom}</span>
     </div>
   );

@@ -9,7 +9,7 @@ import { chargerPronostics } from "@/lib/service/pronostics";
 export const revalidate = 1800;
 
 export const metadata = {
-  title: "Actus — Pronos·26",
+  title: "Actus — Simon Prono Legend",
   description: "Ce que disent les chiffres du Mondial 2026 : lectures du modèle, format à 48 équipes, mode d'emploi des pronos.",
 };
 
@@ -22,12 +22,19 @@ export default async function PageActus() {
 
   return (
     <Apparition className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 data-reveal className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-        Actus du modèle<span className="text-volt">.</span>
-      </h1>
-      <p data-reveal className="mt-2 text-sm text-brume">
-        Pas de rumeurs de vestiaire ici : uniquement ce que les simulations racontent, mises à jour toutes les 30 minutes.
-      </p>
+      <div data-reveal className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
+            Actus du modèle<span className="text-volt">.</span>
+          </h1>
+          <p className="mt-2 text-sm text-brume">
+            Pas de rumeurs de vestiaire ici : uniquement ce que les simulations racontent, mises à jour toutes les 30
+            minutes.
+          </p>
+        </div>
+        {/* eslint-disable-next-line @next/next/no-img-element -- asset local */}
+        <img src="/visuels/commentateur.webp" alt="" width={96} height={96} className="hidden h-24 w-24 shrink-0 sm:block" />
+      </div>
 
       <div className="mt-8 space-y-6">
         <Billet etiquette="La course au titre" titre="Trois nations au-dessus du lot — mais un Mondial à 48 reste piégeux">
@@ -82,11 +89,11 @@ function Billet({ etiquette, titre, children }: { etiquette: string; titre: stri
   );
 }
 
-function Inline({ equipe }: { equipe?: { nomFr: string; drapeau: string } }) {
+function Inline({ equipe }: { equipe?: { nomFr: string; iso: string } }) {
   if (!equipe) return null;
   return (
     <span className="whitespace-nowrap font-medium text-craie">
-      <Drapeau emoji={equipe.drapeau} nom={equipe.nomFr} taille="text-sm" /> {equipe.nomFr}
+      <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="xs" /> {equipe.nomFr}
     </span>
   );
 }

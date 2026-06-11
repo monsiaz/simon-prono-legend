@@ -5,8 +5,10 @@
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
+import Link from "next/link";
 import { useRef, useState } from "react";
 import { createPortal } from "react-dom";
+import { useBoss } from "@/lib/auth/useBoss";
 
 gsap.registerPlugin(useGSAP);
 
@@ -17,6 +19,7 @@ interface Props {
 }
 
 export default function ScoreFloute({ children, className, libelle = "Voir le score" }: Props) {
+  const boss = useBoss();
   const [ouverte, setOuverte] = useState(false);
   const racine = useRef<HTMLSpanElement>(null);
   const popup = useRef<HTMLDivElement>(null);
@@ -67,6 +70,10 @@ export default function ScoreFloute({ children, className, libelle = "Voir le sc
     { dependencies: [ouverte] },
   );
 
+  if (boss) {
+    return <span className={`inline-block ${className ?? ""}`}>{children}</span>;
+  }
+
   return (
     <span ref={racine} className={`relative inline-block ${className ?? ""}`}>
       <span aria-hidden className="pointer-events-none select-none blur-[12px]">
@@ -98,7 +105,9 @@ export default function ScoreFloute({ children, className, libelle = "Voir le sc
             className="terrain-filigrane w-full max-w-sm rounded-3xl border border-volt/40 bg-carte p-8 text-center shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
-            <span data-coucou className="inline-block text-5xl" role="img" aria-label="Main qui salue">
+            {/* eslint-disable-next-line @next/next/no-img-element -- asset local */}
+            <img data-coucou src="/visuels/badge-boss.webp" alt="" width={96} height={96} className="mx-auto h-24 w-24" />
+            <span data-coucou className="mt-1 inline-block text-3xl" role="img" aria-label="Main qui salue">
               👋
             </span>
             <p className="mt-4 font-display text-2xl font-black uppercase leading-tight tracking-tight">
@@ -112,6 +121,11 @@ export default function ScoreFloute({ children, className, libelle = "Voir le sc
             >
               Compris
             </button>
+            <p className="mt-4">
+              <Link href="/compte" className="font-data text-xs text-brume underline-offset-2 hover:text-volt hover:underline">
+                Je suis le boss → me connecter
+              </Link>
+            </p>
           </div>
         </div>,
         document.body,

@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import Apparition from "@/components/anim/Apparition";
 import BarreTriple from "@/components/anim/BarreTriple";
 import Drapeau from "@/components/Drapeau";
+import FlouBoss from "@/components/FlouBoss";
 import HeatmapScores from "@/components/HeatmapScores";
 import ScoreFloute from "@/components/ScoreFloute";
 import { toutesLesEquipes } from "@/lib/data/equipes";
@@ -77,9 +78,9 @@ export default async function PageMatch({ params }: { params: Promise<{ numero: 
             <ol className="mt-3 space-y-2">
               {scoresProbables.map((score, i) => (
                 <li key={`${score.butsA}-${score.butsB}`} className="flex items-center justify-between font-data text-sm">
-                  <span aria-hidden className={`select-none blur-[7px] ${i === 0 ? "font-bold text-craie" : "text-brume"}`}>
+                  <FlouBoss intensite="blur-[7px]" className={i === 0 ? "font-bold text-craie" : "text-brume"}>
                     {score.butsA}–{score.butsB}
-                  </span>
+                  </FlouBoss>
                   <span className={i === 0 ? "font-bold text-volt" : "text-brume"}>{(score.proba * 100).toFixed(1)} %</span>
                 </li>
               ))}
@@ -106,7 +107,7 @@ function Cote({ equipe, placeholder, elo, alignement }: { equipe: ReturnType<typ
   }
   return (
     <div className={`flex flex-col gap-1.5 ${alignement}`}>
-      <Drapeau emoji={equipe.drapeau} nom={equipe.nomFr} taille="text-4xl" />
+      <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="lg" />
       <span className="font-display text-xl font-black leading-tight sm:text-2xl">{equipe.nomFr}</span>
       {elo && <span className="font-data text-xs text-brume">Elo {Math.round(elo)}</span>}
     </div>
@@ -144,7 +145,7 @@ function AdversairesProbables({ match, apparitions, nSims }: { match: MatchEnric
           return (
             <li key={clef} className="flex items-center justify-between rounded-xl border border-ligne px-3 py-2">
               <span className="flex items-center gap-2 text-sm">
-                <Drapeau emoji={equipe.drapeau} nom={equipe.nomFr} taille="text-lg" />
+                <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="sm" />
                 {equipe.nomFr}
               </span>
               <span className="font-data text-sm text-volt">{((compte / nSims) * 100).toFixed(0)} %</span>
