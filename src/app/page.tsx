@@ -1,65 +1,82 @@
-import Image from "next/image";
+// Accueil : tous les matchs, groupés par journée, avec prono et score exact.
 
-export default function Home() {
+import Apparition from "@/components/anim/Apparition";
+import CompteurProba from "@/components/anim/CompteurProba";
+import CarteMatch from "@/components/CarteMatch";
+import Drapeau from "@/components/Drapeau";
+import { toutesLesEquipes } from "@/lib/data/equipes";
+import { chargerPronostics } from "@/lib/service/pronostics";
+import { jourFr } from "@/lib/ui/format";
+
+export const revalidate = 1800;
+
+export default async function PageAccueil() {
+  const { matchs, simulation } = await chargerPronostics();
+  const equipes = new Map(toutesLesEquipes().map((e) => [e.clef, e]));
+  const favoris = simulation.probas.slice(0, 5);
+
+  const parJour = new Map<string, typeof matchs>();
+  for (const match of matchs) {
+    const jour = jourFr(match.calendrier.dateUtc);
+    parJour.set(jour, [...(parJour.get(jour) ?? []), match]);
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <Apparition>
+      <section className="terrain-filigrane border-b border-ligne">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+          <p data-reveal className="font-data text-xs uppercase tracking-[0.3em] text-volt">
+            Coupe du Monde 2026 · 11 juin – 19 juillet
           </p>
+          <h1 data-reveal className="mt-3 max-w-3xl font-display text-4xl font-black uppercase leading-[0.95] tracking-tight sm:text-6xl">
+            Le prono de chaque match,
+            <span className="text-volt"> score exact compris.</span>
+          </h1>
+          <p data-reveal className="mt-4 max-w-xl text-sm leading-relaxed text-brume sm:text-base">
+            Probabilités et scores conseillés issus d&apos;un modèle maison — Elo pondéré, Poisson bivarié,
+            10 000 simulations Monte Carlo — recalculé après chaque coup de sifflet final.
+          </p>
+          <div data-reveal className="mt-8 flex flex-wrap gap-3">
+            {favoris.map((proba, rang) => {
+              const equipe = equipes.get(proba.clef);
+              if (!equipe) return null;
+              const masque = rang === 0;
+              return (
+                <div key={proba.clef} className="flex items-center gap-2.5 rounded-full border border-ligne bg-carte py-2 pl-3 pr-4">
+                  <span className="font-data text-xs text-brume">{rang + 1}</span>
+                  <span
+                    className={`flex items-center gap-2.5 ${masque ? "select-none blur-[8px]" : ""}`}
+                    aria-hidden={masque || undefined}
+                    title={masque ? "Réservé au boss du game" : undefined}
+                  >
+                    <Drapeau emoji={equipe.drapeau} nom={masque ? "Équipe masquée" : equipe.nomFr} taille="text-lg" />
+                    <span className="text-sm font-medium">{equipe.nomFr}</span>
+                  </span>
+                  <CompteurProba valeur={proba.titre} decimales={0} className="font-data text-sm font-bold text-volt" />
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </section>
+
+      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+        {[...parJour.entries()].map(([jour, matchsDuJour]) => (
+          <div key={jour} className="mb-10">
+            <h2 data-reveal className="mb-4 flex items-baseline gap-3 font-display text-lg font-black uppercase tracking-tight">
+              {jour}
+              <span className="font-data text-xs font-normal normal-case tracking-normal text-brume">
+                {matchsDuJour.length} match{matchsDuJour.length > 1 ? "s" : ""}
+              </span>
+            </h2>
+            <div className="grid gap-3 sm:grid-cols-2">
+              {matchsDuJour.map((match) => (
+                <CarteMatch key={match.calendrier.numero} match={match} />
+              ))}
+            </div>
+          </div>
+        ))}
+      </section>
+    </Apparition>
   );
 }
