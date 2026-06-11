@@ -5,6 +5,7 @@
 import Link from "next/link";
 import type { MatchEnrichi } from "@/lib/service/pronostics";
 import { confianceProno, COULEUR_CONFIANCE, heureFr, LIBELLE_PHASE } from "@/lib/ui/format";
+import { COULEUR_VERDICT, LIBELLE_VERDICT } from "@/lib/ui/verdict";
 import BarreTriple from "./anim/BarreTriple";
 import Drapeau from "./Drapeau";
 import ScoreFloute from "./ScoreFloute";
@@ -62,7 +63,7 @@ function CoteEquipe({ nom, iso, alignement }: { nom: string; iso?: string; align
 }
 
 function Centre({ match }: { match: MatchEnrichi }) {
-  const { calendrier: m, prono } = match;
+  const { calendrier: m, prono, verdict } = match;
   if (m.joue) {
     return (
       <div className="text-center">
@@ -70,6 +71,11 @@ function Centre({ match }: { match: MatchEnrichi }) {
           {m.butsDomicile}–{m.butsExterieur}
         </span>
         <span className="mt-1 block font-data text-[10px] uppercase tracking-widest text-volt">Terminé</span>
+        {prono && verdict && (
+          <span className={`mt-1.5 inline-block rounded-full border px-2 py-0.5 font-data text-[10px] font-bold uppercase tracking-wider ${COULEUR_VERDICT[verdict]}`}>
+            {LIBELLE_VERDICT[verdict]} ({prono.butsA}–{prono.butsB})
+          </span>
+        )}
       </div>
     );
   }

@@ -1,0 +1,276 @@
+{
+ "genereLe": "2026-06-11T20:23:20.510Z",
+ "fenetre": "2024-01-01 → aujourd'hui",
+ "buteurs": [
+  {
+   "nom": "Erling Haaland",
+   "equipe": "norway",
+   "buts": 23,
+   "penaltys": 0,
+   "matchsAvecBut": 12,
+   "dernierBut": "2025-11-16",
+   "forme": 23
+  },
+  {
+   "nom": "Aymen Hussein",
+   "equipe": "iraq",
+   "buts": 15,
+   "penaltys": 3,
+   "matchsAvecBut": 12,
+   "dernierBut": "2026-03-31",
+   "forme": 13.5
+  },
+  {
+   "nom": "Harry Kane",
+   "equipe": "england",
+   "buts": 14,
+   "penaltys": 3,
+   "matchsAvecBut": 11,
+   "dernierBut": "2025-11-16",
+   "forme": 12.5
+  },
+  {
+   "nom": "Viktor Gyökeres",
+   "equipe": "sweden",
+   "buts": 13,
+   "penaltys": 2,
+   "matchsAvecBut": 7,
+   "dernierBut": "2026-03-31",
+   "forme": 12
+  },
+  {
+   "nom": "Cristiano Ronaldo",
+   "equipe": "portugal",
+   "buts": 13,
+   "penaltys": 2,
+   "matchsAvecBut": 10,
+   "dernierBut": "2025-10-14",
+   "forme": 12
+  },
+  {
+   "nom": "Yazan Al-Naimat",
+   "equipe": "jordan",
+   "buts": 11,
+   "penaltys": 1,
+   "matchsAvecBut": 9,
+   "dernierBut": "2024-11-19",
+   "forme": 10.5
+  },
+  {
+   "nom": "Akram Afif",
+   "equipe": "qatar",
+   "buts": 12,
+   "penaltys": 5,
+   "matchsAvecBut": 8,
+   "dernierBut": "2025-03-20",
+   "forme": 9.5
+  },
+  {
+   "nom": "Mehdi Taremi",
+   "equipe": "iran",
+   "buts": 11,
+   "penaltys": 3,
+   "matchsAvecBut": 7,
+   "dernierBut": "2025-06-10",
+   "forme": 9.5
+  },
+  {
+   "nom": "Marko Arnautović",
+   "equipe": "austria",
+   "buts": 11,
+   "penaltys": 3,
+   "matchsAvecBut": 5,
+   "dernierBut": "2025-11-15",
+   "forme": 9.5
+  },
+  {
+   "nom": "Mikel Oyarzabal",
+   "equipe": "spain",
+   "buts": 11,
+   "penaltys": 3,
+   "matchsAvecBut": 9,
+   "dernierBut": "2025-11-18",
+   "forme": 9.5
+  },
+  {
+   "nom": "Musa Al-Taamari",
+   "equipe": "jordan",
+   "buts": 10,
+   "penaltys": 1,
+   "matchsAvecBut": 6,
+   "dernierBut": "2025-03-20",
+   "forme": 9.5
+  },
+  {
+   "nom": "Almoez Ali",
+   "equipe": "qatar",
+   "buts": 9,
+   "penaltys": 0,
+   "matchsAvecBut": 7,
+   "dernierBut": "2024-11-14",
+   "forme": 9
+  },
+  {
+   "nom": "Kerem Aktürkoğlu",
+   "equipe": "turkey",
+   "buts": 9,
+   "penaltys": 0,
+   "matchsAvecBut": 6,
+   "dernierBut": "2026-03-31",
+   "forme": 9
+  },
+  {
+   "nom": "Lautaro Martínez",
+   "equipe": "argentina",
+   "buts": 9,
+   "penaltys": 0,
+   "matchsAvecBut": 8,
+   "dernierBut": "2025-09-04",
+   "forme": 9
+  },
+  {
+   "nom": "Mikel Merino",
+   "equipe": "spain",
+   "buts": 9,
+   "penaltys": 0,
+   "matchsAvecBut": 6,
+   "dernierBut": "2025-10-14",
+   "forme": 9
+  },
+  {
+   "nom": "Chris Wood",
+   "equipe": "new-zealand",
+   "buts": 9,
+   "penaltys": 0,
+   "matchsAvecBut": 4,
+   "dernierBut": "2025-03-21",
+   "forme": 9
+  },
+  {
+   "nom": "Mohamed Salah",
+   "equipe": "egypt",
+   "buts": 10,
+   "penaltys": 3,
+   "matchsAvecBut": 9,
+   "dernierBut": "2026-01-10",
+   "forme": 8.5
+  },
+  {
+   "nom": "Son Heung-min",
+   "equipe": "south-korea",
+   "buts": 10,
+   "penaltys": 3,
+   "matchsAvecBut": 9,
+   "dernierBut": "2024-11-19",
+   "forme": 8.5
+  },
+  {
+   "nom": "Memphis Depay",
+   "equipe": "netherlands",
+   "buts": 10,
+   "penaltys": 3,
+   "matchsAvecBut": 8,
+   "dernierBut": "2025-11-14",
+   "forme": 8.5
+  },
+  {
+   "nom": "Cody Gakpo",
+   "equipe": "netherlands",
+   "buts": 10,
+   "penaltys": 4,
+   "matchsAvecBut": 9,
+   "dernierBut": "2025-11-17",
+   "forme": 8
+  },
+  {
+   "nom": "Sardar Azmoun",
+   "equipe": "iran",
+   "buts": 8,
+   "penaltys": 0,
+   "matchsAvecBut": 7,
+   "dernierBut": "2025-03-20",
+   "forme": 8
+  },
+  {
+   "nom": "Andrej Kramarić",
+   "equipe": "croatia",
+   "buts": 8,
+   "penaltys": 0,
+   "matchsAvecBut": 6,
+   "dernierBut": "2025-09-08",
+   "forme": 8
+  },
+  {
+   "nom": "Michael Gregoritsch",
+   "equipe": "austria",
+   "buts": 8,
+   "penaltys": 0,
+   "matchsAvecBut": 8,
+   "dernierBut": "2025-11-18",
+   "forme": 8
+  },
+  {
+   "nom": "Edin Džeko",
+   "equipe": "bosnia-and-herzegovina",
+   "buts": 8,
+   "penaltys": 0,
+   "matchsAvecBut": 7,
+   "dernierBut": "2026-03-26",
+   "forme": 8
+  },
+  {
+   "nom": "Alexander Sørloth",
+   "equipe": "norway",
+   "buts": 8,
+   "penaltys": 0,
+   "matchsAvecBut": 7,
+   "dernierBut": "2025-11-13",
+   "forme": 8
+  },
+  {
+   "nom": "Ali Olwan",
+   "equipe": "jordan",
+   "buts": 9,
+   "penaltys": 3,
+   "matchsAvecBut": 6,
+   "dernierBut": "2025-06-05",
+   "forme": 7.5
+  },
+  {
+   "nom": "Kevin De Bruyne",
+   "equipe": "belgium",
+   "buts": 9,
+   "penaltys": 3,
+   "matchsAvecBut": 6,
+   "dernierBut": "2025-10-13",
+   "forme": 7.5
+  },
+  {
+   "nom": "Jordan Ayew",
+   "equipe": "ghana",
+   "buts": 9,
+   "penaltys": 4,
+   "matchsAvecBut": 6,
+   "dernierBut": "2025-10-08",
+   "forme": 7
+  },
+  {
+   "nom": "Mohamed Amoura",
+   "equipe": "algeria",
+   "buts": 8,
+   "penaltys": 2,
+   "matchsAvecBut": 4,
+   "dernierBut": "2025-10-14",
+   "forme": 7
+  },
+  {
+   "nom": "Ismael Díaz",
+   "equipe": "panama",
+   "buts": 8,
+   "penaltys": 2,
+   "matchsAvecBut": 5,
+   "dernierBut": "2025-10-14",
+   "forme": 7
+  }
+ ]
+}

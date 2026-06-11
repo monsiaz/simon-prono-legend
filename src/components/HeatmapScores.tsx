@@ -42,7 +42,7 @@ export default function HeatmapScores({ matrice, nomA, nomB }: Props) {
   return (
     <div ref={racine}>
       <p className="mb-2 font-data text-xs text-brume">
-        ↓ buts {nomA} · → buts {nomB} — plus c&apos;est clair, plus c&apos;est probable
+        ↓ buts {nomA} · → buts {nomB}. Plus la case est claire, plus le score est probable.
       </p>
       <div className="grid gap-1" style={{ gridTemplateColumns: `auto repeat(${TAILLE}, minmax(0, 1fr))` }}>
         <span aria-hidden className="h-7" />

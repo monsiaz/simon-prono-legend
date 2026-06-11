@@ -1,14 +1,17 @@
 // La méthode, sans boîte noire : sources, calibration, modèle, backtest.
-// Tous les chiffres viennent de src/data/ratings.json — rien d'inventé.
+// Tous les chiffres viennent de src/data/ratings.json. Rien d'inventé.
 
 import Apparition from "@/components/anim/Apparition";
+import BarreRemplie from "@/components/anim/BarreRemplie";
 import Drapeau from "@/components/Drapeau";
+import SchemaPipeline from "@/components/SchemaPipeline";
 import ratingsJson from "@/data/ratings.json";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 
 export const metadata = {
   title: "La méthode — Simon Prono Legend",
-  description: "Elo pondéré, Poisson bivarié Dixon-Coles, Monte Carlo : la mécanique complète du modèle, ses sources de données et son backtest out-of-sample.",
+  description:
+    "Elo pondéré, Poisson bivarié Dixon-Coles, Monte Carlo : la mécanique du modèle, ses sources de données et son backtest out-of-sample.",
 };
 
 export default function PageMethode() {
@@ -21,70 +24,90 @@ export default function PageMethode() {
         Sous le capot<span className="text-volt">.</span>
       </h1>
       <p data-reveal className="mt-3 text-sm leading-relaxed text-brume sm:text-base">
-        Pas de boîte noire, pas de cotes recopiées chez un bookmaker : un modèle statistique complet, reproductible,
-        et évalué honnêtement sur des matchs qu&apos;il n&apos;a jamais vus.
+        Tu vois ici la mécanique complète du modèle : ses sources, sa calibration et la preuve chiffrée
+        qu&apos;il tient la route sur des matchs qu&apos;il n&apos;a jamais vus.
       </p>
+
+      <div data-reveal className="mt-8">
+        <SchemaPipeline />
+      </div>
 
       <Bloc titre="1 · Les données">
         <p>
-          <strong className="text-craie">37 312 matchs internationaux</strong> (1980 → {dernierMatch}), issus d&apos;un
-          dataset ouvert en licence CC0 maintenu publiquement. Le calendrier et les résultats live du Mondial viennent
-          d&apos;un flux public rafraîchi en continu — chaque score final entre dans le modèle en moins de 30 minutes.
+          <strong className="text-craie">37 312 matchs internationaux</strong> (1980 → {dernierMatch}), issus
+          d&apos;un dataset ouvert en licence CC0. Le calendrier et les résultats live du Mondial viennent
+          d&apos;un flux public rafraîchi en continu : chaque score final entre dans le modèle en moins de
+          30 minutes, et un job quotidien force la mise à jour même sans visite.
         </p>
       </Bloc>
 
       <Bloc titre="2 · Le classement Elo, version pondérée">
         <p>
-          Chaque sélection porte un rating mis à jour match après match depuis 1980. La mise à jour est pondérée par
-          l&apos;enjeu (K = 60 en Coupe du Monde, 50 en qualifications et tournois continentaux, 25 en amical) et par la
-          marge de buts (un 4-0 déplace plus de points qu&apos;un 1-0). L&apos;avantage du terrain n&apos;est pas une
-          opinion : il est estimé par recherche sur grille et vaut <strong className="text-craie">{parametres.avantageDomicile} points Elo</strong> —
-          appliqué aux trois pays hôtes quand ils jouent chez eux.
+          Chaque sélection porte un rating mis à jour match après match depuis 1980. Le modèle pondère chaque
+          mise à jour par l&apos;enjeu (K = 60 en Coupe du Monde, 50 en qualifications et tournois
+          continentaux, 25 en amical) et par la marge de buts : un 4-0 déplace plus de points qu&apos;un 1-0.
+          Une recherche sur grille a fixé l&apos;avantage du terrain à{" "}
+          <strong className="text-craie">{parametres.avantageDomicile} points Elo</strong>, appliqués aux trois
+          pays hôtes quand ils jouent chez eux.
         </p>
       </Bloc>
 
       <Bloc titre="3 · Du rating au score : Poisson bivarié corrigé">
         <p>
-          L&apos;écart d&apos;Elo se traduit en buts attendus par une régression de Poisson à lien log,
+          Une régression de Poisson à lien log traduit l&apos;écart d&apos;Elo en buts attendus :
           λ = exp({parametres.alpha.toFixed(2)} + {parametres.beta.toFixed(2)} · Δ/400), ajustée par maximum de
-          vraisemblance sur 2014-2024 avec pondération de récence (demi-vie 3 ans). La correction de Dixon &amp; Coles
-          (1997) corrige le défaut connu du Poisson indépendant sur les petits scores — notre ρ estimé :{" "}
-          <strong className="text-craie">{parametres.rho}</strong>, qui regonfle les 0-0 et 1-1. C&apos;est cette matrice
-          de probabilités score par score qui alimente les heatmaps et le prono conseillé.
+          vraisemblance sur 2014-2024 avec une demi-vie de 3 ans qui donne plus de poids au football récent. La
+          correction de Dixon &amp; Coles (1997) répare le défaut connu du Poisson indépendant sur les petits
+          scores. Notre ρ estimé sur les données : <strong className="text-craie">{parametres.rho}</strong>, qui
+          regonfle les 0-0 et les 1-1. Cette matrice de probabilités score par score alimente les heatmaps et le
+          prono conseillé.
         </p>
       </Bloc>
 
       <Bloc titre="4 · Le prono conseillé : une espérance, pas un coup de cœur">
         <p>
-          Le score affiché n&apos;est pas toujours le plus probable : c&apos;est celui qui maximise
-          l&apos;<strong className="text-craie">espérance de points</strong> au barème d&apos;un jeu de pronostics
-          (score exact / bon résultat). Sur un match serré, viser 2-1 plutôt que 1-1 peut rapporter plus en moyenne,
-          même si le 1-1 est légèrement plus fréquent.
+          Le score affiché maximise l&apos;<strong className="text-craie">espérance de points</strong> au barème
+          d&apos;un jeu de pronostics (score exact / bon résultat). Sur un match serré, viser 2-1 plutôt que 1-1
+          rapporte parfois plus en moyenne, même quand le 1-1 reste le score le plus fréquent.
         </p>
       </Bloc>
 
       <Bloc titre="5 · 10 000 tournois simulés, conditionnés au réel">
         <p>
-          Le tournoi complet — groupes, règle des 8 meilleurs troisièmes (résolue par couplage de contraintes sur le
-          tableau officiel), 32es jusqu&apos;à la finale — est simulé 10 000 fois. Les matchs déjà joués sont
-          verrouillés à leur vrai résultat, les ratings sont remis à jour après chaque coup de sifflet : les
-          probabilités affichées sont donc conditionnelles à l&apos;état réel de la compétition.
+          Le modèle simule 10 000 fois le tournoi complet : groupes, règle des 8 meilleurs troisièmes (résolue
+          par couplage de contraintes sur le tableau officiel), 32es jusqu&apos;à la finale. Les matchs joués
+          restent verrouillés à leur vrai résultat et les ratings se remettent à jour après chaque coup de
+          sifflet. Les probabilités affichées tiennent donc compte de l&apos;état réel de la compétition, et la
+          page Matchs juge chaque prono une fois le match terminé : score exact, bon résultat ou perdu.
         </p>
       </Bloc>
 
       <Bloc titre="6 · Le backtest : la preuve, pas la promesse">
         <p>
-          Paramètres figés fin 2024, évaluation <em>walk-forward</em> sur les{" "}
-          <strong className="text-craie">{backtest.matchsEvalues} matchs internationaux</strong> joués depuis janvier 2025 —
-          aucun n&apos;a servi à l&apos;ajustement, et chaque prédiction n&apos;utilise que l&apos;information disponible
-          avant le coup d&apos;envoi.
+          Paramètres figés fin 2024, puis évaluation <em>walk-forward</em> sur les{" "}
+          <strong className="text-craie">{backtest.matchsEvalues} matchs internationaux</strong> joués depuis
+          janvier 2025. Aucun n&apos;a servi à l&apos;ajustement et chaque prédiction n&apos;utilise que
+          l&apos;information disponible avant le coup d&apos;envoi. L&apos;erreur de prévision reste basse et
+          stable sur toute la fenêtre : sur chaque règle de score propre, le modèle bat largement le hasard.
         </p>
-        <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
-          <Metrique nom="Log-loss" valeur={backtest.logLoss.toFixed(3)} reference={`hasard ${backtest.logLossUniforme.toFixed(2)}`} />
-          <Metrique nom="RPS" valeur={backtest.rps.toFixed(3)} reference="hasard ≈ 0.24" />
-          <Metrique nom="Bon résultat" valeur={`${(backtest.exactitude * 100).toFixed(1)} %`} reference="hasard 33 %" />
-          <Metrique nom="Fenêtre" valeur="2025-26" reference="out-of-sample" />
-        </dl>
+        <div className="mt-5 space-y-4">
+          <Comparatif
+            nom="Log-loss"
+            note="plus court = meilleur"
+            modele={backtest.logLoss}
+            hasard={backtest.logLossUniforme}
+            format={(v) => v.toFixed(3)}
+          />
+          <Comparatif nom="RPS" note="plus court = meilleur" modele={backtest.rps} hasard={0.241} format={(v) => v.toFixed(3)} />
+          <Comparatif
+            nom="Bons résultats"
+            note="plus long = meilleur"
+            modele={backtest.exactitude}
+            hasard={1 / 3}
+            format={(v) => `${(v * 100).toFixed(1)} %`}
+            inverse
+          />
+        </div>
       </Bloc>
 
       <Bloc titre="Le top 10 du moment">
@@ -114,12 +137,42 @@ function Bloc({ titre, children }: { titre: string; children: React.ReactNode })
   );
 }
 
-function Metrique({ nom, valeur, reference }: { nom: string; valeur: string; reference: string }) {
+function Comparatif({
+  nom,
+  note,
+  modele,
+  hasard,
+  format,
+  inverse = false,
+}: {
+  nom: string;
+  note: string;
+  modele: number;
+  hasard: number;
+  format: (v: number) => string;
+  inverse?: boolean;
+}) {
+  const max = Math.max(modele, hasard);
   return (
-    <div className="rounded-xl border border-ligne bg-surface p-3">
-      <dt className="font-data text-[10px] uppercase tracking-wider text-brume">{nom}</dt>
-      <dd className="mt-1 font-display text-xl font-black text-craie">{valeur}</dd>
-      <dd className="font-data text-[10px] text-brume">{reference}</dd>
+    <div>
+      <p className="flex items-baseline justify-between font-data text-xs text-brume">
+        <span className="font-bold uppercase tracking-wider text-craie">{nom}</span>
+        <span>{note}</span>
+      </p>
+      <div className="mt-2 space-y-1.5">
+        <LigneComparatif libelle="Modèle" valeur={format(modele)} proportion={modele / max} couleur="bg-volt" />
+        <LigneComparatif libelle="Hasard" valeur={format(hasard)} proportion={hasard / max} couleur={inverse ? "bg-rouge/70" : "bg-brume/60"} />
+      </div>
+    </div>
+  );
+}
+
+function LigneComparatif({ libelle, valeur, proportion, couleur }: { libelle: string; valeur: string; proportion: number; couleur: string }) {
+  return (
+    <div className="flex items-center gap-3">
+      <span className="w-14 shrink-0 font-data text-xs text-brume">{libelle}</span>
+      <BarreRemplie proportion={proportion} couleur={couleur} className="flex-1" />
+      <span className="w-16 shrink-0 text-right font-data text-xs font-bold text-craie">{valeur}</span>
     </div>
   );
 }

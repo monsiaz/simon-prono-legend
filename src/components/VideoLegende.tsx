@@ -71,7 +71,6 @@ export default function VideoLegende() {
   return (
     <div ref={racine} className="relative mx-auto w-full max-w-[300px] sm:max-w-[320px]">
       <div className="overflow-hidden rounded-3xl border border-volt/30 shadow-[0_0_60px_-15px_var(--color-volt)]">
-        {/* eslint-disable-next-line jsx-a11y/media-has-caption -- clip d'ambiance */}
         <video
           ref={video}
           src="/simon-prono-legend.mp4"

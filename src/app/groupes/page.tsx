@@ -28,7 +28,7 @@ export default async function PageGroupes() {
         Sortie de groupes<span className="text-volt">.</span>
       </h1>
       <p data-reveal className="mt-2 max-w-xl text-sm text-brume">
-        Probabilité d&apos;atteindre les 32es — en direct (1er ou 2e) ou repêchée parmi les 8 meilleurs troisièmes —
+        Probabilité d&apos;atteindre les 32es, en direct (1er ou 2e) ou repêchée parmi les 8 meilleurs troisièmes,
         sur {simulation.nSims.toLocaleString("fr-FR")} simulations du tournoi.
       </p>
 

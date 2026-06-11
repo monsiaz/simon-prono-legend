@@ -37,11 +37,11 @@ export default async function PageActus() {
       </div>
 
       <div className="mt-8 space-y-6">
-        <Billet etiquette="La course au titre" titre="Trois nations au-dessus du lot — mais un Mondial à 48 reste piégeux">
+        <Billet etiquette="La course au titre" titre="Trois nations au-dessus du lot, mais un Mondial à 48 reste piégeux">
           <p>
             À l&apos;heure du calcul ({joues} match{joues > 1 ? "s" : ""} joué{joues > 1 ? "s" : ""} sur 104), trois
-            nations — <Inline equipe={equipes.get(favori.clef)} />, <Inline equipe={equipes.get(deuxieme.clef)} /> et{" "}
-            <Inline equipe={equipes.get(troisieme.clef)} />, dans un ordre que seul le boss connaît — cumulent{" "}
+            nations, <Inline equipe={equipes.get(favori.clef)} />, <Inline equipe={equipes.get(deuxieme.clef)} /> et{" "}
+            <Inline equipe={equipes.get(troisieme.clef)} /> (dans un ordre que seul le boss connaît) cumulent{" "}
             {Math.round((favori.titre + deuxieme.titre + troisieme.titre) * 100)} % des titres simulés. Ce qui laisse
             quand même près d&apos;un tournoi sur deux au reste du plateau : à 48 équipes, les chemins de traverse
             existent. Les cotes détaillées sont sur la page dédiée… et le vainqueur prédit y reste flouté.
@@ -58,7 +58,7 @@ export default async function PageActus() {
           <p>
             Nouveau format, nouvelle mécanique : 12 groupes de 4, les deux premiers passent, plus les{" "}
             <strong className="text-craie">8 meilleurs troisièmes</strong>{" "}sur 12. Concrètement, finir 3e avec 4 points
-            et une différence de buts correcte qualifie presque toujours dans nos simulations — c&apos;est la marge de
+            et une différence de buts correcte qualifie presque toujours dans nos simulations. C&apos;est la marge de
             buts du dernier match de poule qui fait basculer les destins. Le modèle résout ensuite l&apos;affectation des
             troisièmes au tableau (chaque place n&apos;accepte que certains groupes) par couplage de contraintes, comme
             le fera la FIFA.
@@ -69,7 +69,7 @@ export default async function PageActus() {
           <p>
             Chaque carte de match donne la probabilité 1·N·2, un niveau de confiance (élevée dès que l&apos;issue la plus
             probable dépasse 60 %) et un score conseillé calculé pour maximiser l&apos;espérance de points d&apos;un jeu
-            de pronostics — pas pour faire joli. Ce score est flouté : la modélisation est publique, le pronostic final
+            de pronostics, pas pour faire joli. Ce score est flouté : la modélisation est publique, le pronostic final
             appartient au boss du game. La méthode complète, les sources de données et le backtest sur{" "}
             {ratingsJson.backtest.matchsEvalues} matchs sont détaillés sur la page Méthode.
           </p>

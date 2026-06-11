@@ -11,6 +11,7 @@ import ScoreFloute from "@/components/ScoreFloute";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 import { chargerPronostics, type MatchEnrichi } from "@/lib/service/pronostics";
 import { heureFr, jourFr, LIBELLE_PHASE } from "@/lib/ui/format";
+import { COULEUR_VERDICT, LIBELLE_VERDICT } from "@/lib/ui/verdict";
 
 export const revalidate = 1800;
 
@@ -24,7 +25,7 @@ export default async function PageMatch({ params }: { params: Promise<{ numero: 
   const match = matchs.find((m) => m.calendrier.numero === Number(numero));
   if (!match) notFound();
 
-  const { calendrier: m, domicile, exterieur, prevision, scoresProbables, prono } = match;
+  const { calendrier: m, domicile, exterieur, prevision, scoresProbables, prono, verdict } = match;
 
   return (
     <Apparition className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
@@ -56,7 +57,27 @@ export default async function PageMatch({ params }: { params: Promise<{ numero: 
         </section>
       )}
 
-      {prono && prevision && (
+      {prono && verdict && m.joue && (
+        <section data-reveal className={`mt-6 rounded-2xl border bg-carte p-6 ${verdict === "perdu" ? "border-rouge/40" : "border-volt/40"}`}>
+          <h2 className="font-display text-base font-black uppercase tracking-tight">Le prono du boss, au sifflet final</h2>
+          <div className="mt-3 flex flex-wrap items-center gap-4">
+            <span className="font-display text-5xl font-black tracking-tight">
+              {prono.butsA}–{prono.butsB}
+            </span>
+            <span className={`rounded-full border px-3 py-1 font-data text-xs font-bold uppercase tracking-wider ${COULEUR_VERDICT[verdict]}`}>
+              {LIBELLE_VERDICT[verdict]}
+            </span>
+          </div>
+          <p className="mt-3 text-sm text-brume">
+            Prono figé avant le coup d&apos;envoi, avec les ratings du moment. Résultat réel : {m.butsDomicile}–{m.butsExterieur}.
+            {verdict === "exact" && " Score exact. 3 points. La légende."}
+            {verdict === "resultat" && " Bon vainqueur, 1 point au compteur."}
+            {verdict === "perdu" && " Le foot a tranché autrement. Ça arrive, même aux légendes."}
+          </p>
+        </section>
+      )}
+
+      {prono && prevision && !m.joue && (
         <section data-reveal className="mt-6 grid gap-6 sm:grid-cols-2">
           <div className="rounded-2xl border border-volt/40 bg-carte p-6">
             <h2 className="font-display text-base font-black uppercase tracking-tight text-volt">Prono conseillé</h2>

@@ -36,7 +36,7 @@ export default async function PageTableau() {
       </h1>
       <p data-reveal className="mt-2 max-w-2xl text-sm text-brume">
         Tant qu&apos;une affiche n&apos;est pas officielle, on montre les deux équipes les plus fréquentes à ce stade du
-        tableau sur {simulation.nSims.toLocaleString("fr-FR")} simulations — et leur probabilité d&apos;y être.
+        tableau sur {simulation.nSims.toLocaleString("fr-FR")} simulations, avec leur probabilité d&apos;y être.
       </p>
 
       <div className="mt-8 space-y-10">

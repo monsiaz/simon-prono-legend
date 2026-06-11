@@ -32,6 +32,7 @@ export default function ScoreFloute({ children, className, libelle = "Voir le sc
     setOuverte(true);
   });
 
+  // eslint-disable-next-line react-hooks/refs -- le ref n'est lu qu'à l'exécution du gestionnaire, pas au rendu (pattern contextSafe GSAP)
   const fermer = contextSafe((e?: React.MouseEvent) => {
     e?.preventDefault();
     e?.stopPropagation();
