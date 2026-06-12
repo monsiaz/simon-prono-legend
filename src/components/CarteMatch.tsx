@@ -5,7 +5,7 @@
 import Link from "next/link";
 import type { MatchEnrichi } from "@/lib/service/pronostics";
 import { confianceProno, COULEUR_CONFIANCE, heureFr, LIBELLE_PHASE } from "@/lib/ui/format";
-import { COULEUR_VERDICT, LIBELLE_VERDICT } from "@/lib/ui/verdict";
+import { COULEUR_VERDICT, LIBELLE_VERDICT, scoreLeurre } from "@/lib/ui/verdict";
 import BarreTriple from "./anim/BarreTriple";
 import Drapeau from "./Drapeau";
 import ScoreFloute from "./ScoreFloute";
@@ -70,10 +70,15 @@ function Centre({ match }: { match: MatchEnrichi }) {
         <span className="font-display text-4xl font-black tracking-tight text-craie sm:text-5xl">
           {m.butsDomicile}–{m.butsExterieur}
         </span>
-        <span className="mt-1 block font-data text-[10px] uppercase tracking-widest text-volt">Terminé</span>
+        <span className="mt-1 block font-data text-[10px] uppercase tracking-widest text-brume">Terminé</span>
         {prono && verdict && (
-          <span className={`mt-1.5 inline-block rounded-full border px-2 py-0.5 font-data text-[10px] font-bold uppercase tracking-wider ${COULEUR_VERDICT[verdict]}`}>
-            {LIBELLE_VERDICT[verdict]} ({prono.butsA}–{prono.butsB})
+          <span className="mt-2 flex flex-col items-center gap-1">
+            <span className="font-data text-[11px] text-brume">
+              Le boss avait dit <strong className="text-craie">{prono.butsA}–{prono.butsB}</strong>
+            </span>
+            <span className={`inline-block rounded-full border px-2.5 py-0.5 font-data text-[10px] font-bold uppercase tracking-wider ${COULEUR_VERDICT[verdict]}`}>
+              {LIBELLE_VERDICT[verdict]}
+            </span>
           </span>
         )}
       </div>
@@ -82,7 +87,11 @@ function Centre({ match }: { match: MatchEnrichi }) {
   if (prono) {
     return (
       <div className="pointer-events-auto text-center">
-        <ScoreFloute>
+        <ScoreFloute
+          leurre={
+            <span className="font-display text-4xl font-black tracking-tight text-volt sm:text-5xl">{scoreLeurre(m.numero)}</span>
+          }
+        >
           <span className="font-display text-4xl font-black tracking-tight text-volt sm:text-5xl">
             {prono.butsA}–{prono.butsB}
           </span>

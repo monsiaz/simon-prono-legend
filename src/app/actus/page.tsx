@@ -2,6 +2,7 @@
 
 import Apparition from "@/components/anim/Apparition";
 import Drapeau from "@/components/Drapeau";
+import Vignette from "@/components/Vignette";
 import ratingsJson from "@/data/ratings.json";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 import { chargerPronostics } from "@/lib/service/pronostics";
@@ -66,6 +67,7 @@ export default async function PageActus() {
         </Billet>
 
         <Billet etiquette="Mode d'emploi" titre="Lire un prono comme un pro : confiance, espérance, score voilé">
+          <Vignette src="/visuels/bd-var.webp" taille={96} className="float-right ml-4 w-20 sm:w-24" />
           <p>
             Chaque carte de match donne la probabilité 1·N·2, un niveau de confiance (élevée dès que l&apos;issue la plus
             probable dépasse 60 %) et un score conseillé calculé pour maximiser l&apos;espérance de points d&apos;un jeu

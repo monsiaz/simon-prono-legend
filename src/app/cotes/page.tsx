@@ -52,7 +52,7 @@ export default async function PageCotes() {
         </div>
         <div className="flex items-center gap-4">
           {/* eslint-disable-next-line @next/next/no-img-element -- asset local */}
-          <img src="/visuels/trophee.webp" alt="" width={88} height={88} className="hidden h-20 w-20 sm:block" />
+          <img src="/visuels/bd-coupe-volee.webp" alt="Le boss s'enfuit avec la coupe, poursuivi par les arbitres" width={150} height={150} className="hidden w-36 rounded-2xl sm:block" />
           <CompteurProba valeur={favori.titre} decimales={1} className="font-display text-5xl font-black text-volt sm:text-6xl" />
         </div>
       </section>

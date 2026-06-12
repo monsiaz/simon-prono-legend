@@ -4,6 +4,7 @@
 import Apparition from "@/components/anim/Apparition";
 import BarreRemplie from "@/components/anim/BarreRemplie";
 import Drapeau from "@/components/Drapeau";
+import Vignette from "@/components/Vignette";
 import buteursJson from "@/data/buteurs.json";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 
@@ -20,13 +21,18 @@ export default function PageButeurs() {
 
   return (
     <Apparition className="mx-auto max-w-4xl px-4 py-10 sm:px-6">
-      <h1 data-reveal className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-        Les buteurs en forme<span className="text-volt">.</span>
-      </h1>
-      <p data-reveal className="mt-2 max-w-2xl text-sm text-brume">
-        Classement sur les buts en sélection depuis janvier 2024, hors buts contre son camp, pénaltys comptés
-        moitié. Les buts du Mondial s&apos;ajouteront au fil du tournoi.
-      </p>
+      <div data-reveal className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
+            Les buteurs en forme<span className="text-volt">.</span>
+          </h1>
+          <p className="mt-2 max-w-2xl text-sm text-brume">
+            Classement sur les buts en sélection depuis janvier 2024, hors buts contre son camp, pénaltys comptés
+            moitié. Les buts du Mondial s&apos;ajouteront au fil du tournoi.
+          </p>
+        </div>
+        <Vignette src="/visuels/bd-but.webp" taille={120} className="hidden w-28 sm:block" />
+      </div>
 
       <div className="mt-8 grid gap-3 sm:grid-cols-3">
         {[or, argent, bronze].map((buteur, rang) => {

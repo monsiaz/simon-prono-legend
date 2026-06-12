@@ -4,6 +4,7 @@
 
 import Apparition from "@/components/anim/Apparition";
 import Drapeau from "@/components/Drapeau";
+import Vignette from "@/components/Vignette";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 import { chargerPronostics, type MatchEnrichi } from "@/lib/service/pronostics";
 import { heureFr, jourFr, LIBELLE_PHASE } from "@/lib/ui/format";
@@ -31,9 +32,12 @@ export default async function PageTableau() {
 
   return (
     <Apparition className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <h1 data-reveal className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-        Le tableau final<span className="text-volt">.</span>
-      </h1>
+      <div data-reveal className="flex items-center justify-between gap-4">
+        <h1 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
+          Le tableau final<span className="text-volt">.</span>
+        </h1>
+        <Vignette src="/visuels/bd-tirage.webp" taille={104} className="hidden w-24 sm:block" />
+      </div>
       <p data-reveal className="mt-2 max-w-2xl text-sm text-brume">
         Tant qu&apos;une affiche n&apos;est pas officielle, on montre les deux équipes les plus fréquentes à ce stade du
         tableau sur {simulation.nSims.toLocaleString("fr-FR")} simulations, avec leur probabilité d&apos;y être.

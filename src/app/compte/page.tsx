@@ -78,7 +78,7 @@ function Formulaire() {
   return (
     <form onSubmit={connecter} className="mt-6 rounded-2xl border border-ligne bg-carte p-6">
       {/* eslint-disable-next-line @next/next/no-img-element -- asset local */}
-      <img src="/visuels/videur-vip.webp" alt="Videur devant un cordon VIP, pancarte boss only" width={200} height={200} className="mx-auto w-40 rounded-2xl" />
+      <img src="/visuels/bd-billet.webp" alt="Billet doré boss only" width={320} height={213} className="mx-auto w-full max-w-xs rounded-2xl" />
       <p className="mt-4 text-sm text-brume">
         Réservé au boss du game. Connecté, tu vois les scores exacts et le vainqueur prédit — les autres restent sur le
         flou.

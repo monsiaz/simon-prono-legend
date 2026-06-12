@@ -11,7 +11,7 @@ import ScoreFloute from "@/components/ScoreFloute";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 import { chargerPronostics, type MatchEnrichi } from "@/lib/service/pronostics";
 import { heureFr, jourFr, LIBELLE_PHASE } from "@/lib/ui/format";
-import { COULEUR_VERDICT, LIBELLE_VERDICT } from "@/lib/ui/verdict";
+import { COULEUR_VERDICT, LIBELLE_VERDICT, scoreLeurre } from "@/lib/ui/verdict";
 
 export const revalidate = 1800;
 
@@ -70,9 +70,9 @@ export default async function PageMatch({ params }: { params: Promise<{ numero: 
           </div>
           <p className="mt-3 text-sm text-brume">
             Prono figé avant le coup d&apos;envoi, avec les ratings du moment. Résultat réel : {m.butsDomicile}–{m.butsExterieur}.
-            {verdict === "exact" && " Score exact. 3 points. La légende."}
-            {verdict === "resultat" && " Bon vainqueur, 1 point au compteur."}
-            {verdict === "perdu" && " Le foot a tranché autrement. Ça arrive, même aux légendes."}
+            {verdict === "exact" && " Dans le mille. 3 points. On n'appelle pas Simon « le boss » pour rien."}
+            {verdict === "resultat" && " Bon vainqueur, 1 point au compteur. Le boss voit loin."}
+            {verdict === "perdu" && " Le foot a tranché autrement. Ça arrive, même aux légendes. Surtout aux autres."}
           </p>
         </section>
       )}
@@ -82,7 +82,9 @@ export default async function PageMatch({ params }: { params: Promise<{ numero: 
           <div className="rounded-2xl border border-volt/40 bg-carte p-6">
             <h2 className="font-display text-base font-black uppercase tracking-tight text-volt">Prono conseillé</h2>
             <div className="mt-3">
-              <ScoreFloute>
+              <ScoreFloute
+                leurre={<span className="font-display text-6xl font-black tracking-tight">{scoreLeurre(m.numero)}</span>}
+              >
                 <span className="font-display text-6xl font-black tracking-tight">
                   {prono.butsA}–{prono.butsB}
                 </span>

@@ -4,6 +4,7 @@
 import Apparition from "@/components/anim/Apparition";
 import BarreRemplie from "@/components/anim/BarreRemplie";
 import Drapeau from "@/components/Drapeau";
+import Vignette from "@/components/Vignette";
 import { equipeDepuisNomFifa } from "@/lib/data/equipes";
 import { chargerPronostics } from "@/lib/service/pronostics";
 
@@ -24,9 +25,12 @@ export default async function PageGroupes() {
 
   return (
     <Apparition className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
-      <h1 data-reveal className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-        Sortie de groupes<span className="text-volt">.</span>
-      </h1>
+      <div data-reveal className="flex items-center justify-between gap-4">
+        <h1 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
+          Sortie de groupes<span className="text-volt">.</span>
+        </h1>
+        <Vignette src="/visuels/bd-gardien.webp" taille={104} className="hidden w-24 sm:block" />
+      </div>
       <p data-reveal className="mt-2 max-w-xl text-sm text-brume">
         Probabilité d&apos;atteindre les 32es, en direct (1er ou 2e) ou repêchée parmi les 8 meilleurs troisièmes,
         sur {simulation.nSims.toLocaleString("fr-FR")} simulations du tournoi.

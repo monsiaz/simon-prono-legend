@@ -16,9 +16,12 @@ interface Props {
   children: React.ReactNode;
   className?: string;
   libelle?: string;
+  // Affiché sous le flou à la place du vrai contenu : même en plissant les
+  // yeux (ou en zoomant), on ne voit qu'un faux score.
+  leurre?: React.ReactNode;
 }
 
-export default function ScoreFloute({ children, className, libelle = "Voir le score" }: Props) {
+export default function ScoreFloute({ children, className, libelle = "Voir le score", leurre }: Props) {
   const boss = useBoss();
   const [ouverte, setOuverte] = useState(false);
   const racine = useRef<HTMLSpanElement>(null);
@@ -77,8 +80,8 @@ export default function ScoreFloute({ children, className, libelle = "Voir le sc
 
   return (
     <span ref={racine} className={`relative inline-block ${className ?? ""}`}>
-      <span aria-hidden className="pointer-events-none select-none blur-[12px]">
-        {children}
+      <span aria-hidden className="pointer-events-none select-none overflow-hidden blur-[14px] saturate-50">
+        {leurre ?? children}
       </span>
       <button
         type="button"
@@ -86,7 +89,7 @@ export default function ScoreFloute({ children, className, libelle = "Voir le sc
         className="absolute inset-0 flex cursor-pointer items-center justify-center"
         aria-label={libelle}
       >
-        <span className="rounded-full border border-volt/50 bg-nuit/80 px-3 py-1.5 font-data text-[10px] font-bold uppercase tracking-widest text-volt transition-colors duration-200 hover:bg-volt hover:text-nuit">
+        <span className="whitespace-nowrap rounded-full border border-volt/50 bg-nuit/85 px-3.5 py-1.5 font-data text-[10px] font-bold uppercase tracking-widest text-volt transition-all duration-200 hover:scale-105 hover:bg-volt hover:text-nuit">
           {libelle}
         </span>
       </button>
@@ -107,10 +110,7 @@ export default function ScoreFloute({ children, className, libelle = "Voir le sc
             onClick={(e) => e.stopPropagation()}
           >
             {/* eslint-disable-next-line @next/next/no-img-element -- asset local */}
-            <img data-coucou src="/visuels/badge-boss.webp" alt="" width={96} height={96} className="mx-auto h-24 w-24" />
-            <span data-coucou className="mt-1 inline-block text-3xl" role="img" aria-label="Main qui salue">
-              👋
-            </span>
+            <img data-coucou src="/visuels/bd-pouce.webp" alt="" width={132} height={132} className="mx-auto h-32 w-32 rounded-2xl" />
             <p className="mt-4 font-display text-2xl font-black uppercase leading-tight tracking-tight">
               Seul le <span className="text-volt">boss du game</span> peut voir le score
             </p>

@@ -5,6 +5,7 @@ import Apparition from "@/components/anim/Apparition";
 import BarreRemplie from "@/components/anim/BarreRemplie";
 import Drapeau from "@/components/Drapeau";
 import SchemaPipeline from "@/components/SchemaPipeline";
+import Vignette from "@/components/Vignette";
 import ratingsJson from "@/data/ratings.json";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 
@@ -20,13 +21,18 @@ export default function PageMethode() {
 
   return (
     <Apparition className="mx-auto max-w-3xl px-4 py-10 sm:px-6">
-      <h1 data-reveal className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
-        Sous le capot<span className="text-volt">.</span>
-      </h1>
-      <p data-reveal className="mt-3 text-sm leading-relaxed text-brume sm:text-base">
-        Tu vois ici la mécanique complète du modèle : ses sources, sa calibration et la preuve chiffrée
-        qu&apos;il tient la route sur des matchs qu&apos;il n&apos;a jamais vus.
-      </p>
+      <div data-reveal className="flex items-center justify-between gap-4">
+        <div>
+          <h1 className="font-display text-3xl font-black uppercase tracking-tight sm:text-4xl">
+            Sous le capot<span className="text-volt">.</span>
+          </h1>
+          <p className="mt-3 text-sm leading-relaxed text-brume sm:text-base">
+            Tu vois ici la mécanique complète du modèle : ses sources, sa calibration et la preuve chiffrée
+            qu&apos;il tient la route sur des matchs qu&apos;il n&apos;a jamais vus.
+          </p>
+        </div>
+        <Vignette src="/visuels/bd-savant.webp" taille={120} className="hidden w-28 sm:block" />
+      </div>
 
       <div data-reveal className="mt-8">
         <SchemaPipeline />
@@ -83,6 +89,7 @@ export default function PageMethode() {
       </Bloc>
 
       <Bloc titre="6 · Le backtest : la preuve, pas la promesse">
+        <Vignette src="/visuels/bd-ordinateur.webp" taille={96} className="float-right ml-4 w-20 sm:w-24" />
         <p>
           Paramètres figés fin 2024, puis évaluation <em>walk-forward</em> sur les{" "}
           <strong className="text-craie">{backtest.matchsEvalues} matchs internationaux</strong> joués depuis

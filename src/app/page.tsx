@@ -8,8 +8,10 @@ import CompteurProba from "@/components/anim/CompteurProba";
 import CarteMatch from "@/components/CarteMatch";
 import Drapeau from "@/components/Drapeau";
 import FlouBoss from "@/components/FlouBoss";
+import TableauDeChasse from "@/components/TableauDeChasse";
 import TitreHero from "@/components/TitreHero";
 import VideoLegende from "@/components/VideoLegende";
+import Vignette from "@/components/Vignette";
 import buteursJson from "@/data/buteurs.json";
 import { toutesLesEquipes } from "@/lib/data/equipes";
 import { chargerPronostics } from "@/lib/service/pronostics";
@@ -33,8 +35,14 @@ export default async function PageAccueil() {
 
   return (
     <Apparition>
-      <section className="terrain-filigrane border-b border-ligne">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1fr_auto]">
+      <section className="relative overflow-hidden border-b border-ligne">
+        <div
+          aria-hidden
+          className="absolute inset-0 bg-cover bg-center opacity-30"
+          style={{ backgroundImage: "url(/visuels/bd-stade-nuit.webp)" }}
+        />
+        <div aria-hidden className="absolute inset-0 bg-gradient-to-r from-nuit via-nuit/80 to-nuit/40" />
+        <div className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 py-12 sm:px-6 sm:py-16 lg:grid-cols-[1fr_auto]">
           <div>
             <p data-reveal className="font-data text-xs uppercase tracking-[0.3em] text-volt">
               Coupe du Monde 2026 · 11 juin – 19 juillet
@@ -47,6 +55,20 @@ export default async function PageAccueil() {
               Un modèle maison fait les pronos : Elo pondéré, Poisson bivarié, 10 000 simulations Monte Carlo.
               Il se recalcule après chaque coup de sifflet final. Toi, tu profites.
             </p>
+            <div data-reveal className="mt-7 flex flex-wrap items-center gap-3">
+              <a
+                href="#matchs"
+                className="rounded-full bg-volt px-6 py-3 font-data text-sm font-bold uppercase tracking-wider text-nuit transition-transform duration-200 hover:scale-105"
+              >
+                Les matchs du jour
+              </a>
+              <Link
+                href="/compte"
+                className="rounded-full border border-ligne px-6 py-3 font-data text-sm font-bold uppercase tracking-wider text-brume transition-colors duration-200 hover:border-volt/60 hover:text-volt"
+              >
+                Je suis le boss
+              </Link>
+            </div>
           </div>
           <div data-reveal className="lg:w-[300px]">
             <VideoLegende />
@@ -54,18 +76,10 @@ export default async function PageAccueil() {
         </div>
       </section>
 
-      {tracking.joues > 0 && (
-        <section className="border-b border-ligne bg-surface">
-          <div className="mx-auto flex max-w-6xl flex-wrap items-center gap-x-6 gap-y-2 px-4 py-4 sm:px-6">
-            <span className="font-data text-xs uppercase tracking-[0.25em] text-volt">Tracking du boss</span>
-            <Stat valeur={tracking.joues} libelle={`prono${tracking.joues > 1 ? "s" : ""} jugé${tracking.joues > 1 ? "s" : ""}`} />
-            <Stat valeur={tracking.exacts} libelle="scores exacts" accent="text-volt" />
-            <Stat valeur={tracking.bonsResultats} libelle="bons résultats" accent="text-or" />
-            <Stat valeur={tracking.perdus} libelle="perdus" accent="text-rouge" />
-            <Stat valeur={tracking.points} libelle="points" accent="text-volt" />
-          </div>
-        </section>
-      )}
+      <TableauDeChasse
+        juges={matchs.filter((m) => m.calendrier.joue && m.verdict).sort((a, b) => b.calendrier.numero - a.calendrier.numero)}
+        tracking={tracking}
+      />
 
       <section className="mx-auto max-w-6xl px-4 pt-10 sm:px-6">
         <div data-reveal className="flex items-baseline justify-between gap-4">
@@ -77,20 +91,39 @@ export default async function PageAccueil() {
         <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
           {favoris.map((proba, rang) => {
             const equipe = equipes.get(proba.clef)!;
+            const masque = rang === 0;
             const contenu = (
               <span className="flex items-center gap-2.5">
-                <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="md" />
+                <Drapeau iso={equipe.iso} nom={equipe.nomFr} taille="lg" />
                 <span className="text-sm font-bold leading-tight">{equipe.nomFr}</span>
               </span>
             );
             return (
-              <div key={proba.clef} data-reveal className="rounded-2xl border border-ligne bg-carte p-4">
-                <div className="flex items-center justify-between">
-                  <span className="font-data text-xs text-brume">n°{rang + 1}</span>
-                  <CompteurProba valeur={proba.titre} decimales={1} className="font-display text-xl font-black text-volt" />
-                </div>
-                <div className="mt-2.5">{rang === 0 ? <FlouBoss className="inline-flex">{contenu}</FlouBoss> : contenu}</div>
-                <BarreRemplie className="mt-3" proportion={proba.titre / meilleureCote} />
+              <div
+                key={proba.clef}
+                data-reveal
+                className={`group relative overflow-hidden rounded-2xl border bg-carte p-4 transition-all duration-200 hover:-translate-y-1 ${
+                  masque ? "border-volt/50" : "border-ligne hover:border-volt/30"
+                }`}
+              >
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute -right-1 -top-4 font-display text-7xl font-black text-craie/5 transition-colors duration-300 group-hover:text-volt/10"
+                >
+                  {rang + 1}
+                </span>
+                {masque && (
+                  <span className="font-data text-[10px] font-bold uppercase tracking-wider text-volt">Le pick du boss</span>
+                )}
+                {!masque && <span className="font-data text-[10px] uppercase tracking-wider text-brume">n°{rang + 1}</span>}
+                <div className="mt-2.5">{masque ? <FlouBoss className="inline-flex">{contenu}</FlouBoss> : contenu}</div>
+                <CompteurProba
+                  valeur={proba.titre}
+                  decimales={1}
+                  className="mt-3 block font-display text-3xl font-black leading-none text-volt"
+                />
+                <span className="font-data text-[10px] uppercase tracking-wider text-brume">de titres simulés</span>
+                <BarreRemplie className="mt-2.5" proportion={proba.titre / meilleureCote} />
               </div>
             );
           })}
@@ -127,13 +160,13 @@ export default async function PageAccueil() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
+      <section id="matchs" className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
         {[...parJour.entries()].map(([jour, matchsDuJour]) => (
           <div key={jour} className="mb-10">
             <h2 data-reveal className="mb-4 flex flex-wrap items-baseline gap-3 font-display text-lg font-black uppercase tracking-tight">
               {jour}
               {jour === aujourdHui && (
-                <span className="rounded-full bg-volt px-2.5 py-0.5 font-data text-[10px] font-bold uppercase tracking-wider text-nuit">
+                <span className="rounded-full bg-volt px-2.5 py-0.5 font-data text-[10px] font-bold uppercase tracking-wider text-nuit motion-safe:animate-pulse">
                   Aujourd&apos;hui
                 </span>
               )}
@@ -149,14 +182,28 @@ export default async function PageAccueil() {
           </div>
         ))}
       </section>
-    </Apparition>
-  );
-}
 
-function Stat({ valeur, libelle, accent }: { valeur: number; libelle: string; accent?: string }) {
-  return (
-    <span className="font-data text-sm text-brume">
-      <strong className={accent ?? "text-craie"}>{valeur}</strong> {libelle}
-    </span>
+      <section className="border-t border-ligne">
+        <div className="mx-auto flex max-w-6xl flex-col items-center gap-6 px-4 py-12 text-center sm:px-6 sm:flex-row sm:text-left">
+          <Vignette src="/visuels/bd-supporters.webp" taille={160} className="w-36 sm:w-40" />
+          <div>
+            <h2 data-reveal className="font-display text-2xl font-black uppercase tracking-tight sm:text-3xl">
+              T&apos;as scrollé jusqu&apos;ici ?<span className="text-volt"> Le boss valide.</span>
+            </h2>
+            <p data-reveal className="mt-2 max-w-lg text-sm text-brume">
+              104 matchs, 10 000 simulations, un seul boss. Va voir qui soulève la coupe d&apos;après le modèle.
+              Enfin… presque.
+            </p>
+            <Link
+              href="/cotes"
+              data-reveal
+              className="mt-5 inline-block rounded-full bg-volt px-6 py-3 font-data text-sm font-bold uppercase tracking-wider text-nuit transition-transform duration-200 hover:scale-105"
+            >
+              Voir les cotes du titre
+            </Link>
+          </div>
+        </div>
+      </section>
+    </Apparition>
   );
 }
