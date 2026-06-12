@@ -50,9 +50,18 @@ export default async function PageMatch({ params }: { params: Promise<{ numero: 
       {prevision && (
         <section data-reveal className="mt-6 rounded-2xl border border-ligne bg-carte p-6">
           <h2 className="font-display text-base font-black uppercase tracking-tight">Issue du match</h2>
-          <BarreTriple className="mt-4" probaA={prevision.probaA} probaNul={prevision.probaNul} probaB={prevision.probaB} />
+          <BarreTriple
+            className="mt-4"
+            probaA={prevision.probaA}
+            probaNul={prevision.probaNul}
+            probaB={prevision.probaB}
+            floutable={!m.joue}
+          />
           <p className="mt-4 font-data text-xs text-brume">
-            Buts attendus : {domicile?.nomFr} {prevision.lambdaA.toFixed(2)} · {exterieur?.nomFr} {prevision.lambdaB.toFixed(2)}
+            Buts attendus : {domicile?.nomFr}{" "}
+            {m.joue ? prevision.lambdaA.toFixed(2) : <FlouBoss intensite="blur-[5px]" className="inline-block">{prevision.lambdaA.toFixed(2)}</FlouBoss>} ·{" "}
+            {exterieur?.nomFr}{" "}
+            {m.joue ? prevision.lambdaB.toFixed(2) : <FlouBoss intensite="blur-[5px]" className="inline-block">{prevision.lambdaB.toFixed(2)}</FlouBoss>}
           </p>
         </section>
       )}
@@ -115,7 +124,7 @@ export default async function PageMatch({ params }: { params: Promise<{ numero: 
       {prevision && domicile && exterieur && (
         <section data-reveal className="mt-6 rounded-2xl border border-ligne bg-carte p-6">
           <h2 className="mb-4 font-display text-base font-black uppercase tracking-tight">Tous les scores</h2>
-          <HeatmapScores matrice={prevision.matrice} nomA={domicile.nomFr} nomB={exterieur.nomFr} />
+          <HeatmapScores matrice={prevision.matrice} nomA={domicile.nomFr} nomB={exterieur.nomFr} floutable={!m.joue} />
         </section>
       )}
 

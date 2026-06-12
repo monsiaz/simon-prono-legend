@@ -7,6 +7,7 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import { useBoss } from "@/lib/auth/useBoss";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -16,9 +17,17 @@ interface Props {
   matrice: number[][];
   nomA: string;
   nomB: string;
+  floutable?: boolean; // version symétrisée pour les non-boss : zéro info de vainqueur
 }
 
-export default function HeatmapScores({ matrice, nomA, nomB }: Props) {
+function symetriser(matrice: number[][]): number[][] {
+  return matrice.map((ligne, a) => ligne.map((_, b) => (matrice[a][b] + (matrice[b]?.[a] ?? 0)) / 2));
+}
+
+export default function HeatmapScores({ matrice: matriceVraie, nomA, nomB, floutable = false }: Props) {
+  const boss = useBoss();
+  const neutralisee = floutable && !boss;
+  const matrice = neutralisee ? symetriser(matriceVraie) : matriceVraie;
   const racine = useRef<HTMLDivElement>(null);
   const maxProba = Math.max(...matrice.slice(0, TAILLE).flatMap((ligne) => ligne.slice(0, TAILLE)));
 
@@ -43,6 +52,11 @@ export default function HeatmapScores({ matrice, nomA, nomB }: Props) {
     <div ref={racine}>
       <p className="mb-2 font-data text-xs text-brume">
         ↓ buts {nomA} · → buts {nomB}. Plus la case est claire, plus le score est probable.
+        {neutralisee && (
+          <span className="mt-1 block text-or" title="Réservé au boss du game">
+            Version neutralisée : aucun camp favorisé à l&apos;écran. La vraie carte appartient au boss.
+          </span>
+        )}
       </p>
       <div className="grid gap-1" style={{ gridTemplateColumns: `auto repeat(${TAILLE}, minmax(0, 1fr))` }}>
         <span aria-hidden className="h-7" />

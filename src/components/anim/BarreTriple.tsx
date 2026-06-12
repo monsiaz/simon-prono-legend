@@ -1,12 +1,15 @@
 "use client";
 
 // Barre 1·N·2 : trois segments proportionnels aux probabilités, remplis en
-// cascade à l'apparition.
+// cascade. En mode floutable (match à venir, visiteur non connecté), les
+// segments s'égalisent et les pourcentages se masquent : la barre ne vend
+// plus le vainqueur. Le boss connecté voit les vraies valeurs.
 
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRef } from "react";
+import { useBoss } from "@/lib/auth/useBoss";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -15,6 +18,7 @@ interface Props {
   probaNul: number;
   probaB: number;
   className?: string;
+  floutable?: boolean; // masque les valeurs pour les non-boss
 }
 
 const SEGMENTS = [
@@ -23,9 +27,11 @@ const SEGMENTS = [
   { clef: "B", couleur: "bg-or" },
 ] as const;
 
-export default function BarreTriple({ probaA, probaNul, probaB, className }: Props) {
+export default function BarreTriple({ probaA, probaNul, probaB, className, floutable = false }: Props) {
+  const boss = useBoss();
+  const masque = floutable && !boss;
   const racine = useRef<HTMLDivElement>(null);
-  const valeurs = [probaA, probaNul, probaB];
+  const valeurs = masque ? [1 / 3, 1 / 3, 1 / 3] : [probaA, probaNul, probaB];
 
   useGSAP(
     () => {
@@ -40,7 +46,7 @@ export default function BarreTriple({ probaA, probaNul, probaB, className }: Pro
         });
       });
     },
-    { scope: racine },
+    { scope: racine, dependencies: [masque] },
   );
 
   return (
@@ -48,20 +54,30 @@ export default function BarreTriple({ probaA, probaNul, probaB, className }: Pro
       <div className="flex h-2 gap-0.5 overflow-hidden rounded-full">
         {SEGMENTS.map((segment, i) => (
           <div key={segment.clef} className="h-full rounded-full bg-ligne" style={{ width: `${valeurs[i] * 100}%` }}>
-            <div data-segment className={`h-full origin-left rounded-full ${segment.couleur}`} />
+            <div data-segment className={`h-full origin-left rounded-full ${masque ? "bg-brume/30" : segment.couleur}`} />
           </div>
         ))}
       </div>
       <div className="mt-1.5 flex justify-between font-data text-[11px] text-brume">
-        <span>
-          1 <strong className="text-craie">{Math.round(probaA * 100)} %</strong>
-        </span>
-        <span>
-          N <strong className="text-craie">{Math.round(probaNul * 100)} %</strong>
-        </span>
-        <span>
-          2 <strong className="text-craie">{Math.round(probaB * 100)} %</strong>
-        </span>
+        {masque ? (
+          <>
+            <span>1 <strong className="select-none blur-[5px]" aria-hidden>{Math.round(probaA * 7919) % 90} %</strong></span>
+            <span className="uppercase tracking-wider" title="Réservé au boss du game">probas du boss 🤫</span>
+            <span>2 <strong className="select-none blur-[5px]" aria-hidden>{Math.round(probaB * 6151) % 90} %</strong></span>
+          </>
+        ) : (
+          <>
+            <span>
+              1 <strong className="text-craie">{Math.round(probaA * 100)} %</strong>
+            </span>
+            <span>
+              N <strong className="text-craie">{Math.round(probaNul * 100)} %</strong>
+            </span>
+            <span>
+              2 <strong className="text-craie">{Math.round(probaB * 100)} %</strong>
+            </span>
+          </>
+        )}
       </div>
     </div>
   );

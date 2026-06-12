@@ -8,6 +8,7 @@ import { confianceProno, COULEUR_CONFIANCE, heureFr, LIBELLE_PHASE } from "@/lib
 import { COULEUR_VERDICT, LIBELLE_VERDICT, scoreLeurre } from "@/lib/ui/verdict";
 import BarreTriple from "./anim/BarreTriple";
 import Drapeau from "./Drapeau";
+import FlouBoss from "./FlouBoss";
 import ScoreFloute from "./ScoreFloute";
 
 export default function CarteMatch({ match }: { match: MatchEnrichi }) {
@@ -40,11 +41,22 @@ export default function CarteMatch({ match }: { match: MatchEnrichi }) {
         </div>
 
         {prevision && !m.joue && (
-          <BarreTriple className="mt-4" probaA={prevision.probaA} probaNul={prevision.probaNul} probaB={prevision.probaB} />
+          <BarreTriple
+            className="mt-4"
+            probaA={prevision.probaA}
+            probaNul={prevision.probaNul}
+            probaB={prevision.probaB}
+            floutable
+          />
         )}
         {prono && prevision && !m.joue && (
           <div className="mt-3 flex items-center justify-between">
-            <span className="font-data text-xs text-brume">Bon résultat à {Math.round(prono.probaBonResultat * 100)} %</span>
+            <span className="font-data text-xs text-brume">
+              Bon résultat à{" "}
+              <FlouBoss intensite="blur-[5px]" className="inline-block">
+                {Math.round(prono.probaBonResultat * 100)} %
+              </FlouBoss>
+            </span>
             <ConfianceTag probaMax={Math.max(prevision.probaA, prevision.probaNul, prevision.probaB)} />
           </div>
         )}
