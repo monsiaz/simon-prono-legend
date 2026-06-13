@@ -5,6 +5,7 @@
 import snapshot from "@/data/calendrier-snapshot.json";
 
 const URL_FEED = "https://fixturedownload.com/feed/json/fifa-world-cup-2026";
+const TIMEOUT_FEED_MS = 8000;
 
 interface EntreeFeed {
   MatchNumber: number;
@@ -48,6 +49,15 @@ function phaseDuTour(tour: number): Phase {
 
 const PLACEHOLDER = /^([123][A-L]|3[A-L]{4,6}|To be announced)$/i;
 
+// Le feed renseigne Winner="Draw" sur un match nul : ce n'est pas une équipe.
+// Seul un vrai vainqueur (départage aux tirs au but en phase finale) doit être
+// conservé ; tout le reste (nul, vide) vaut "pas de vainqueur".
+export function vainqueurReel(winner: string | null | undefined): string | null {
+  const nom = winner?.trim();
+  if (!nom || nom.toLowerCase() === "draw") return null;
+  return nom;
+}
+
 function normaliserEntree(e: EntreeFeed): MatchCalendrier {
   const estPlaceholder = (nom: string) => PLACEHOLDER.test(nom.trim());
   const phase = e.MatchNumber === 103 && phaseDuTour(e.RoundNumber) === "finale" ? "petite-finale" : phaseDuTour(e.RoundNumber);
@@ -64,7 +74,7 @@ function normaliserEntree(e: EntreeFeed): MatchCalendrier {
     butsDomicile: e.HomeTeamScore,
     butsExterieur: e.AwayTeamScore,
     joue: e.HomeTeamScore != null && e.AwayTeamScore != null,
-    vainqueur: e.Winner?.trim() || null,
+    vainqueur: vainqueurReel(e.Winner),
   };
 }
 
@@ -73,11 +83,20 @@ export function normaliserCalendrier(entrees: EntreeFeed[]): MatchCalendrier[] {
 }
 
 export async function chargerCalendrier(): Promise<MatchCalendrier[]> {
+  // Le snapshot est rafraîchi hors-ligne par l'ingestion CI (.github/workflows/
+  // ingestion.yml), donc fiable même périmé de quelques heures. Le fetch live
+  // n'est qu'un bonus : on l'abandonne vite (8 s) car le feed peut mettre >20 s,
+  // ce qui dépasse le timeout de la fonction Vercel et nous fait servir un
+  // snapshot muet. Tout échec est tracé pour rester visible.
   try {
-    const reponse = await fetch(URL_FEED, { next: { revalidate: 1800 } });
-    if (!reponse.ok) throw new Error(`feed ${reponse.status}`);
+    const reponse = await fetch(URL_FEED, {
+      next: { revalidate: 1800 },
+      signal: AbortSignal.timeout(TIMEOUT_FEED_MS),
+    });
+    if (!reponse.ok) throw new Error(`feed HTTP ${reponse.status}`);
     return normaliserCalendrier((await reponse.json()) as EntreeFeed[]);
-  } catch {
+  } catch (erreur) {
+    console.error("[calendrier] feed live KO, repli sur snapshot embarqué :", erreur);
     return normaliserCalendrier(snapshot as EntreeFeed[]);
   }
 }

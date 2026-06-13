@@ -1,0 +1,46 @@
+name: Ingestion résultats
+
+# Rafraîchit le snapshot calendrier+résultats depuis le feed officiel.
+# Un runner CI n'a pas le timeout serverless de Vercel : il encaisse un feed
+# lent (>20 s) là où le fetch request-time abandonne. Commit + push si le
+# snapshot a changé → redeploy auto Vercel avec les derniers scores.
+
+on:
+  schedule:
+    - cron: "0 */3 * * *" # toutes les 3 h
+  workflow_dispatch: {} # déclenchement manuel possible
+
+permissions:
+  contents: write
+
+concurrency:
+  group: ingestion
+  cancel-in-progress: false
+
+jobs:
+  ingerer:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - name: Ingestion du feed
+        run: npx tsx scripts/ingerer-calendrier.ts
+
+      - name: Commit si snapshot modifié
+        run: |
+          if git diff --quiet -- src/data/calendrier-snapshot.json; then
+            echo "Snapshot inchangé, rien à commit."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/data/calendrier-snapshot.json
+          git commit -m "Ingestion auto : nouveaux résultats World Cup 2026"
+          git push
