@@ -39,8 +39,12 @@ jobs:
             echo "Snapshot inchangé, rien à commit."
             exit 0
           fi
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Email du seat Vercel de Simon : si la team applique
+          # COMMIT_AUTHOR_REQUIRED, un commit github-actions[bot] verrait son
+          # deploy bloqué (cf incident git-author mismatch). On commit donc sous
+          # l'identité qui possède un seat.
+          git config user.name "Simon Azoulay"
+          git config user.email "s.azoulay@graciamediaweb.com"
           git add src/data/calendrier-snapshot.json
           git commit -m "Ingestion auto : nouveaux résultats World Cup 2026"
           git push
